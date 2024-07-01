@@ -1,0 +1,3 @@
+WIDTH = 768
+HEIGHT = 640
+

@@ -1,0 +1,18 @@
+- Explore planets to collect broken fragments.
+- Collect all broken fragments to form one shape and clear infection.
+- Procedurally generate planets , their fauna and flora
+- Players explore in a space shooter fashion with zooming on and off planets
+
+Priorities
+- Smooth turning and movement physics
+- Implement the zooming mechanism
+- Able to enter planets
+- Generate planet features
+- Test out different planets
+- explore planets to collect fragments
+- Implement breaking down a shape into fragments
+- Add sounds and graphics
+- Test on web build
+
+- Add an oxygen system that slowly runs out on planets and can be replenished
+
