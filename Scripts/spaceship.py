@@ -30,17 +30,45 @@ class SpaceShip(pg.sprite.Sprite):
 
         self.origPosition = vec2(position)
     
+    def collide_planet(self,planet):
+        planet_dist_x = (planet.position.x - self.position.x)
+        planet_dist_y = (planet.position.y - self.position.y)
+
+        if planet_dist_x > (self.rect.width/2 + planet.radius):
+            return False
+        if planet_dist_y > (self.rect.height/2 + planet.radius):
+            return False
+        if planet_dist_x <= (self.rect.width/2 ):
+            return True
+        if planet_dist_y <= (self.rect.height/2):
+            return True
+        
+        corner_dist_sq = (planet_dist_x - self.rect.width/2)**2 + (planet_dist_y - self.rect.height/2)**2
+        return corner_dist_sq <= planet.radius**2
+
+    
 
     def update(self):
 
         if self.active:
             keys = pg.key.get_pressed()
             if keys[pg.K_LEFT] or keys[pg.K_a]:
-                self.position.x -= self.speed
+                if self.position.x <= self.rect.width//2:
+                    self.position.x = self.rect.width//2
+                else:
+                    self.position.x -= self.speed
+                
             if keys[pg.K_RIGHT] or keys[pg.K_d]:
-                self.position.x += self.speed
+                if self.position.x >= WORLDSIZE[0] - self.rect.width//2:
+                    self.position.x = WORLDSIZE[0] - self.rect.width//2
+                else:
+                    self.position.x += self.speed
+                
             if keys[pg.K_UP] or keys[pg.K_w]:
-                self.position.y -= self.speed
+                if self.position.y <= self.rect.height:
+                    self.position.y = self.rect.height
+                else:
+                    self.position.y -= self.speed
                
             if keys[pg.K_DOWN] or keys[pg.K_s]:
                 
