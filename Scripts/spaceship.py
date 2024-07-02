@@ -2,7 +2,7 @@ import pygame as pg
 from settings import *
 from pygame.math import Vector2 as vec2
 
-SPACESHIP_SIZE = (WIDTH//4,HEIGHT//4)
+SPACESHIP_SIZE = (64,64)
 
 #Position the spaceship on the bottom center of world
 SPACESHIP_POS = (
@@ -10,11 +10,11 @@ SPACESHIP_POS = (
     WORLDSIZE[1]- SPACESHIP_SIZE[1]//2,
     )
 
-SPACESHIP_SPEED = 5 #degrees per frame
+SPACESHIP_SPEED = 500 #pixels per second
 
 class SpaceShip(pg.sprite.Sprite):
-    def __init__(self,groups,size=SPACESHIP_SIZE,position=SPACESHIP_POS):
-        super().__init__(groups)
+    def __init__(self,size=SPACESHIP_SIZE,position=SPACESHIP_POS):
+        super().__init__()
         self.size = size
         self.position = vec2(position)
 
@@ -31,8 +31,8 @@ class SpaceShip(pg.sprite.Sprite):
         self.origPosition = vec2(position)
     
     def collide_planet(self,planet):
-        planet_dist_x = (planet.position.x - self.position.x)
-        planet_dist_y = (planet.position.y - self.position.y)
+        planet_dist_x = abs(planet.position.x - self.position.x)
+        planet_dist_y = abs(planet.position.y - self.position.y)
 
         if planet_dist_x > (self.rect.width/2 + planet.radius):
             return False
@@ -48,7 +48,7 @@ class SpaceShip(pg.sprite.Sprite):
 
     
 
-    def update(self):
+    def update(self,dt):
 
         if self.active:
             keys = pg.key.get_pressed()
@@ -56,26 +56,26 @@ class SpaceShip(pg.sprite.Sprite):
                 if self.position.x <= self.rect.width//2:
                     self.position.x = self.rect.width//2
                 else:
-                    self.position.x -= self.speed
+                    self.position.x -= self.speed *dt
                 
             if keys[pg.K_RIGHT] or keys[pg.K_d]:
                 if self.position.x >= WORLDSIZE[0] - self.rect.width//2:
                     self.position.x = WORLDSIZE[0] - self.rect.width//2
                 else:
-                    self.position.x += self.speed
+                    self.position.x += self.speed*dt
                 
             if keys[pg.K_UP] or keys[pg.K_w]:
-                if self.position.y <= self.rect.height:
-                    self.position.y = self.rect.height
+                if self.position.y <= self.rect.height/2:
+                    self.position.y = self.rect.height/2
                 else:
-                    self.position.y -= self.speed
+                    self.position.y -= self.speed*dt
                
             if keys[pg.K_DOWN] or keys[pg.K_s]:
                 
                 if self.position.y >= self.origPosition.y:
                     self.position.y = self.origPosition.y
                 else:
-                    self.position.y += self.speed
+                    self.position.y += self.speed*dt
             
 
         

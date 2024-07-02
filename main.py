@@ -26,27 +26,28 @@ class Game:
 
         #surfaces
         self.main_window = main_window
-        self.world = pg.Surface(WORLDSIZE,pg.SRCALPHA)
+        self.world = pg.Surface(WORLDSIZE)
 
 
         #sprites
         self.all_sprites = pg.sprite.Group()
-        self.spaceship = SpaceShip(self.all_sprites)
+        self.spaceship = SpaceShip()
 
         self.clock = pg.time.Clock()
 
         self.spawn_planets()
-    
+
+        self.all_sprites.add(self.spaceship)
 
     def spawn_planets(self):
         self.planets = pg.sprite.Group()
-        num_planets = rand(20,50)
+        num_planets = rand(50,100)
         max_attempts = 100
         spaceship_width = self.spaceship.rect.width
         for _ in range(num_planets):
             for attempt in range(max_attempts):
                 
-                radius = rand(spaceship_width//4,spaceship_width)
+                radius = rand(spaceship_width,spaceship_width*3)
                 center = (rand(radius,WORLDSIZE[0]-radius),
                           rand(radius,WORLDSIZE[1]-radius))
                 new_planet = Planet(radius,center)
@@ -70,22 +71,23 @@ class Game:
                     new_planet.kill()
                 
         
-        
-
-        
+    def check_planet_collisions(self):
+        for planet in self.planets:
+            if self.spaceship.collide_planet(planet):
+                self.hovered_planet = planet
+                
 
        
 
-    def draw_space(self):
-        self.main_window.fill(1)
+    def draw_space(self,dt):
+        self.main_window.fill(-1)
         self.world.fill(1)
         
-         #temp
-        self.world.blit(pg.Surface((100,100)),(2000,6000))
+         
 
 
         #update sprites
-        self.all_sprites.update()
+        self.all_sprites.update(dt)
         self.all_sprites.draw(self.world)
         self.main_window.blit(self.world,self.spaceship.viewcords)
 
@@ -94,14 +96,19 @@ class Game:
     async def loop(self):
         self.running = True
         while self.running:
+            dt = self.clock.tick(FPS) / 1000
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
                     quit()
             
             if self.game_state == GameState.SPACE:
-                self.draw_space()
+                self.draw_space(dt)
+                self.hovered_planet = None
+                self.check_planet_collisions()
             
+            
+
 
             self.clock.tick(FPS)
             
