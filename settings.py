@@ -1,3 +1,15 @@
-WIDTH = 768
-HEIGHT = 640
+from enum import Enum
 
+WIDTH = 800
+HEIGHT = 800
+
+WORLDSIZE = (WIDTH*8,HEIGHT*8)
+
+FPS = 60
+
+class Color(Enum):
+    RED = (255,0,0)
+    GREEN = (0,255,0)
+    BLUE = (0,0,255)
+    WHITE = (255,255,255)
+    BLACK = (0,0,0)
